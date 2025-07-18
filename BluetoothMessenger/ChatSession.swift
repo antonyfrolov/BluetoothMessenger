@@ -43,7 +43,6 @@ class ChatSession: NSObject, ObservableObject {
             return cached
         }
         
-        // Генерируем цвет на основе хеша имени
         let hash = name.unicodeScalars.map { $0.value }.reduce(0, +)
         let hue = Double(hash % 360) / 360.0
         let color = Color(hue: hue, saturation: 0.7, brightness: 0.8)
@@ -53,7 +52,6 @@ class ChatSession: NSObject, ObservableObject {
     }
     
     init(modelContext: ModelContext) {
-        // Получаем сохраненные настройки или создаем новые
         let descriptor = FetchDescriptor<UserSettings>()
         let settings = (try? modelContext.fetch(descriptor).first) ?? UserSettings(userName: "User \(UIDevice.current.identifierForVendor!.uuidString)")
         
@@ -61,21 +59,16 @@ class ChatSession: NSObject, ObservableObject {
         self.currentUserName = settings.userName
         self.myPeerId = MCPeerID(displayName: settings.userName)
     
-    
-        // 1. Инициализация всех stored properties
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .required)
         serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         
-        // 2. Вызов super.init
         super.init()
         
-        // 3. Настройка делегатов (теперь можно использовать self)
         session.delegate = self
         serviceAdvertiser.delegate = self
         serviceBrowser.delegate = self
-        
-        // 4. Запуск сервисов
+
         startServices()
     }
     
@@ -85,13 +78,9 @@ class ChatSession: NSObject, ObservableObject {
     }
     
     func updateUserName(_ newName: String) {
-       //>> guard newName != currentUserName else { return }
-        
-        // Обновляем в памяти
         currentUserName = newName
         myPeerId = MCPeerID(displayName: newName)
         
-        // Сохраняем в SwiftData
         let descriptor = FetchDescriptor<UserSettings>()
         if let settings = try? modelContext.fetch(descriptor).first {
             settings.userName = newName
@@ -99,22 +88,18 @@ class ChatSession: NSObject, ObservableObject {
             modelContext.insert(UserSettings(userName: newName))
         }
         
-        // Останавливаем текущие сервисы
         serviceAdvertiser.stopAdvertisingPeer()
         serviceBrowser.stopBrowsingForPeers()
         session.disconnect()
         
-        // Пересоздаем сервисы с новыми параметрами
         session = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .required)
         serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: serviceType)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: serviceType)
         
-        // Настраиваем делегаты
         session.delegate = self
         serviceAdvertiser.delegate = self
         serviceBrowser.delegate = self
         
-        // Запускаем сервисы заново
         startServices()
     }
     
@@ -178,7 +163,6 @@ class ChatSession: NSObject, ObservableObject {
             connectionStatus = "Searching for devices..."
             isConnected = false
         } else {
-            //let peerNames = connectedPeers.map { $0.displayName }.joined(separator: ", ")
             connectionStatus = "Connected with: \(connectedPeers.count) device(s)"
             isConnected = true
         }
@@ -201,7 +185,6 @@ extension ChatSession: MCSessionDelegate {
                 print("Connecting to \(peerID.displayName)")
             case .notConnected:
                 print("Disconnected from \(peerID.displayName)")
-                // Попытка переподключения
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     self.reconnect()
                 }
