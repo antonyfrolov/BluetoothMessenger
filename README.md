@@ -6,4 +6,4 @@ Features:
 3. Automatic connection and adding to chat nearby devices with this opened app
 4. Device IDs are using to difference users, but users can change it to own nicks
 6. Different colors to different users in chat
-6. Chat history and nicks keeping in the phone storage
+6. Settings are keeping in the phone storage
