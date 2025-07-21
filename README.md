@@ -1,1 +1,1 @@
-Base project to communicate offline beetween iOS-based devices via bluetooth.
+Base project to offline messaging between iOS-based devices via bluetooth.
