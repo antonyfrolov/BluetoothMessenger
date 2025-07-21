@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSBluetoothAlwaysUsageDescription</key>
+    <string>This app uses Bluetooth to connect with nearby devices for messaging</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>This app uses Bluetooth to connect with nearby devices for messaging</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>This app uses the local network to discover nearby devices</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_bluetooth-chat._tcp</string>
+    </array>
+</dict>
+</plist>

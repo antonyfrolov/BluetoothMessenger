@@ -14,20 +14,17 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // Статус соединения
                 ConnectionStatusView(chatSession: chatSession)
                 
-                // Список сообщений
                 MessagesListView(chatSession: chatSession)
                 
-                // Поле ввода и кнопки
                 InputView(
                     messageText: $messageText,
                     isLoading: chatSession.isLoading,
                     sendAction: sendMessage
                 )
             }
-            .navigationTitle("Bluetooth Chat")
+            .navigationTitle("Bluetooth Messenger")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingSettings.toggle() }) {
